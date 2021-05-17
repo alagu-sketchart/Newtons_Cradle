@@ -1,63 +1,147 @@
 const Engine = Matter.Engine;
-const World = Matter.World;
+const World= Matter.World;
 const Bodies = Matter.Bodies;
-const Body = Matter.Body;
 const Constraint = Matter.Constraint;
 
-var world, engine;
-var bob1, bob2, bob3, bob4, bob5, roof;
-var sling1, sling2, sling3, sling4, sling5;
+var engine, world, hex;
+var score = 0;
 
 function preload(){
-	
+  hex = loadImage("hexagon.png");
+
 }
 
-function setup(){
-	createCanvas(1000, 800);
-	engine = Engine.create();
-	world = engine.world;
+function setup() {
+  createCanvas(1500,600);
+  engine = Engine.create();
+  world = engine.world;
 
-	//Create the Bodies Here.
-	bob1 = new Bob(340, 450, 0);
-	bob2 = new Bob(400, 450, 0);
-	bob3 = new Bob(460, 450, 0);
-	bob4 = new Bob(520, 450, 0);
-	bob5 = new Bob(580, 450, 0);
-	sling1 = new Sling(bob1.body, { x: 340, y: 200 });
-	sling2 = new Sling(bob2.body, { x: 400, y: 200 });
-	sling3 = new Sling(bob3.body, { x: 460, y: 200 });
-	sling4 = new Sling(bob4.body, { x: 520, y: 200 });
-	sling5 = new Sling(bob5.body, { x: 580, y: 200 });
-	roof = new Roof(900, 160, 600, 25);
+  block1 = new Block(600,260,30,40);
+  block2 = new Block(570,260,30,40);
+  block3 = new Block(540,260,30,40);
+  block4 = new Block(630,260,30,40);
+  block5 = new Block(660,260,30,40);
 
-	Engine.run(engine);
+  block6 = new Block(585,220,30,40);
+  block7 = new Block(555,220,30,40);
+  block8 = new Block(615,220,30,40);
+  block9 = new Block(645,220,30,40);
+
+  bolck10 = new Block(600,170,30,40);
+  block11 = new Block(570,180,30,40);
+  block12 = new Block(630,180,30,40);
+
+  block13 = new Block(600,140,30,40);
+
+  ground1 = new Ground(600,285,200,10);
+  ground2 = new Ground(900,195,200,10);
+  ground3 = new Ground(750, 600, 1500, 10)
+
+  block14 = new Block(900,170,30,40);
+  block15 = new Block(930,170,30,40);
+  block16 = new Block(870,170,30,40);
+  block17 = new Block(840,170,30,40);
+  block18 = new Block(960,170,30,40);
+
+  block19 = new Block(900,140,30,40);
+  block20 = new Block(930,140,30,40);
+  block21 = new Block(870,140,30,40);
+
+  block22 = new Block(900,110,30,40);
+
+  ball = Bodies.circle(50,200,20);
+  World.add(world,ball);
+
+  sling = new Slingshot(this.ball,{x:150, y:160});
 }
 
-function draw(){
-  background(125);
+function draw() {
+  background("grey");
   Engine.update(engine);
-  bob1.display();
-  bob2.display();
-  bob3.display();
-  bob4.display();
-  bob5.display();
-  sling1.display();
-  sling2.display();
-  sling3.display();
-  sling4.display();
-  sling5.display();
-  roof.display();
-  drawSprites();
+  //stroke("white");
+  textSize(13);
+  fill("pink");
+  text("Highscore : "+ score,width-300,50);
+
+  fill("blue");
+  block1.display();
+  block1.score();
+  block2.display();
+  block2.score();
+  block3.display();
+  block3.score();
+  block4.display();
+  block4.score();
+  block5.display();
+  block5.score();
+
+  fill("pink");
+  block6.display();
+  block6.score();
+  block7.display();
+  block7.score();
+  block8.display();
+  block8.score();
+  block9.display();
+  block9.score();
+
+  fill("lightblue");
+  bolck10.display();
+  bolck10.score();
+
+  block11.display();
+  block11.score();
+  block12.display();
+  block12.score();
+
+  fill("black");
+  block13.display(); 
+  block13.score();
+
+  fill(rgb(135, 205, 236));
+  block14.display();
+  block14.score();
+  block15.display();
+  block15.score();
+  block16.display();
+  block16.score();
+  block17.display();
+  block17.score();
+  block18.display();
+  block18.score();
+
+  fill("lightGreen");
+  block19.display();
+  block19.score();
+  block20.display();  
+  block20.score();
+  block21.display();  
+  block21.score();
+
+  fill("black");
+  block22.display();
+  block22.score();
+
+  ground1.display();
+  ground2.display();
+  ground3.display();
+
+  imageMode(CENTER);
+  image(hex,ball.position.x,ball.position.y,40,40);
+
+  sling.display();
 }
 
-function keyPressed() {
-	if (keyCode === RIGHT_ARROW){
-		Matter.Body.applyForce(bob5.body,bob5.body.position,{x:75,y:-75});
-	}
-	if (keyCode === UP_ARROW){
-		Matter.Body.applyForce(bob1.body,bob1.body.position,{x:-75,y:-75});
-	}
-	if (keyCode === LEFT_ARROW){
-		Matter.Body.applyForce(bob1.body,bob1.body.position,{x:-75,y:-75});
-	}
+function mouseDragged(){
+  Matter.Body.setPosition(this.ball, {x: mouseX , y: mouseY});
+}
+
+function mouseReleased(){
+  sling.fly();
+}
+
+function keyPressed(){
+  if(keyCode === UP_ARROW){
+      sling.attach(this.ball);
+  }
 }
